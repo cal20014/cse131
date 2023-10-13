@@ -1,0 +1,23 @@
+FUNCTION load_board(filename):
+    OPEN file with filename
+    READ board data from file
+    CLOSE file
+    RETURN board
+END FUNCTION
+
+FUNCTION read_board(filename)
+    OPEN file with filename
+    READ board_data from file
+    CLOSE file
+    RETURN board_data
+END FUNCTION
+
+
+FUNCTION save_game(board, filename)
+    TRY:
+        OPEN file with filename for writing
+        WRITE data to file as JSON
+        CLOSE file
+    EXCEPTION
+        DISPLAY "An error occured while saving the game."
+END FUNCTION

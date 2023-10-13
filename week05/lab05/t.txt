@@ -1,0 +1,9 @@
+display(board)
+    PUT A B C D E F G H I
+    FOR row = 0 ... 8
+        IF row == 3 or row == 6
+            PUT --+--+--+
+        FOR column = 0 ... 8
+            separator = "  |  |  \n"
+            PUT board[row][column] or ' '
+            PUT separator[column]

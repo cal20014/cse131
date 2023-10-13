@@ -1,0 +1,3 @@
+computeOffset(year, Month)
+numDays = 0
+FOR yearCount = 1753 ... yearnumDays += daysYear(yearCount)

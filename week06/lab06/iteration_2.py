@@ -209,10 +209,14 @@ def handle_input_value(board, filename, row, column, coordinates, value):
         value (str): The value provided by the user.
     """
     if value.lower() == "s":
-        display_hint_options(board, row, column, coordinates, value)
+        hints_options = get_hint_options(board, row, column)
+        display_hint_options(board, row, column, coordinates, hints_options)
+        
     elif value.lower() == "q":
         save_game(board, filename)
         return True
+    elif is_valid_move(board, row, column, int(value)) == False:
+        print(f"Invalid move: {value} is not a valid move for {coordinates}.")
     else:
         update_board(board, row, column, value)
     return False
@@ -238,20 +242,54 @@ def validate_input_value(value):
     # If neither condition is met, return False
     return False
 
-
-def display_hint_options(board, row, column, coordinates, value):
+def get_hint_options(board, row, column):
     """
-    Display possible valid entries for the specified Sudoku cell.
-    
+    Get possible valid entries for the specified Sudoku cell.
+
     Parameters:
         board (list of lists of int): The current state of the Sudoku board.
         row (int): The row coordinate of the cell.
-        column (str): The column coordinate of the cell.
-        value (str): The value to validate as a hint.
+        column (int): The column coordinate of the cell.
+
+    Returns:
+        list of int: List of possible valid entries for the cell.
     """
     hint_options = []
 
-    print(f"Hint options for {coordinates}: {hint_options}")
+    position_value = board[row][column]
+
+    if position_value != 0:
+        return hint_options
+
+    for num in range(1, 10):
+        if is_valid_move(board, row, column, num):
+            hint_options.append(num)
+
+    return hint_options
+
+def display_hint_options(board, row, column, coordinates, hint_options):
+    """
+    Display possible valid entries for the specified Sudoku cell.
+
+    Parameters:
+        board (list of lists of int): The current state of the Sudoku board.
+        row (int): The row coordinate of the cell.
+        column (int): The column coordinate of the cell.
+        coordinates (str): The coordinates of the cell in the format [Letter][Number] (e.g., A1, C7, etc.).
+        hint_options (list of int): List of possible valid entries for the cell.
+    """
+    position_value = board[row][column]
+
+    if position_value != 0:
+        print(f"The cell at coordinates {coordinates} is already filled with the value {position_value}.")
+    else:
+        if hint_options:
+            print(f"Hint options for {coordinates}: {hint_options}")
+        else:
+            print(f"No valid hints available for {coordinates}.")
+
+
+
 
 def update_board(board, row, column, value):
     """
@@ -270,6 +308,98 @@ def update_board(board, row, column, value):
     update_board = board
 
     return update_board
+
+
+def get_row_move_options(board, row):
+    """
+    Get possible valid entries for a specified row in the Sudoku board.
+
+    Parameters:
+        board (list of lists of int): The current state of the Sudoku board.
+        row (int): The row index for which to find valid entries.
+
+    Returns:
+        list of int: List of possible valid entries for the specified row.
+    """
+    row_move_options = []
+
+    for num in range(1, 10):
+        if is_valid_move(board, row, num):
+            row_move_options.append(num)
+
+    return row_move_options
+
+def get_column_move_options(board, column):
+    """
+    Get possible valid entries for a specified column in the Sudoku board.
+
+    Parameters:
+        board (list of lists of int): The current state of the Sudoku board.
+        column (int): The column index for which to find valid entries.
+
+    Returns:
+        list of int: List of possible valid entries for the specified column.
+    """
+    column_move_options = []
+
+    for num in range(1, 10):
+        if is_valid_move(board, num, column):
+            column_move_options.append(num)
+
+    return column_move_options
+
+
+def get_square_move_options(board, row, column):
+    """
+    Get possible valid entries for a specified 3x3 square in the Sudoku board.
+
+    Parameters:
+        board (list of lists of int): The current state of the Sudoku board.
+        row (int): The row index within the square.
+        column (int): The column index within the square.
+
+    Returns:
+        list of int: List of possible valid entries for the specified square.
+    """
+    square_move_options = []
+
+    start_row = 3 * (row // 3)
+    start_column = 3 * (column // 3)
+
+    for num in range(1, 10):
+        if is_valid_move(board, start_row, start_column, num):
+            square_move_options.append(num)
+
+    return square_move_options
+
+
+def is_valid_move(board, row, column, value):
+    """
+    Validate whether the provided move in sudoku is valid.
+    
+    """
+
+    # Check if the value is already in the row
+    for check_num in range(len(board[row])):
+        if board[row][check_num] == value:
+            return False
+
+    # Check if the value is already in the column
+    for check_num in range(len(board)):
+        if board[check_num][column] == value:
+            return False
+        
+    # Get the starting row and column of the 3x3 square
+    start_row = 3 * (row // 3)
+    start_column = 3 * (column // 3)
+
+    # Check if the value is already in the 3x3 square
+    for check_row in range(start_row, start_row + 3):
+        for check_column in range(start_column, start_column + 3):
+            if board[check_row][check_column] == value:
+                return False
+    
+    return True
 
 def play_game(board, filename):
     """
@@ -290,34 +420,42 @@ def play_game(board, filename):
 
     print("Thanks for playing!")
 
-
-def is_valid_move(board, row, column, value):
+def test_game_driver():
     """
-    Validate whether the provided move in sudoku is valid.
     
     """
 
-    # Check if the value is already in the row
-    for check_num in range(len(board[row])):
-        if board[row][check_num] == value:
-            return False
+# Things to test for:
+    # All test coordinates are valid
+    # Coodinate Validation:
+    # Invalid input: Recognize if the user types something other than a coordinate or the letter 'Q' to quit, or letter ‘S’ to display all possible values for a given square
+    # Reversed coordinates: Handle both "B2" and "2B" in the same way
+    # Lowercase coordinates: Handle both "B2" and "b2" in the same way
+    # Invalid number: Warn the user if an invalid number such as 0 or 11 is entered into the board
+    # Square already filled: Warn the user if the selected square already has a number
+    # Unique Row: Recognize if the user's number is already present on the selected row
+    # Unique Column: Recognize if the user's number is already present on the selected column
+    # Unique Inside Square: Recognize if the user's number is already present on the selected inside square
+    # Show possible values: At the user's request, show the possible values for a given square
 
-    # Check if the value is already in the column
-    for check_num in range(len(board)):
-        if board[check_num][column] == value:
-            return False
-
-    # Check if the value is already in the 3x3 square
-
-    # Get the starting row and column of the 3x3 square
-    start_row = row - row % 3
-    start_column = column - column % 3
-
-    
-
-
-    
-    return True
+    # Test Cases: [num, name, input, output, value, type]
+    test_cases = [
+        [1, "Use letter J", "J1", False, None, "Error"],
+        [2, "Use letter Z", "ZZ", False, None, "Error"],
+        [3, "Valid Case", "B2", True, None, "Requirement"],
+        [4, "Reversed Coordinate", "2B", True, None, "Requirement"],
+        [5, "Lowercase Coordinate", "b2", True, None, "Requirement"],
+        [6, "Lowercase Coordinate Reversed", "2b", True, None, "Requirement"],
+        [7, "Invalid Number", "A0", False, None, "Error"],
+        [8, "Invalid Number", "A11", False, None, "Error"],
+        [9, "Square Already Filled", "A1", False, None, "Requirement"],
+        [10, "Unique Row", "A2", False, None, "Requirement"],
+        [11, "Unique Column", "B1", False, None, "Requirement"],
+        [12, "Unique Inside Square", "B2", False, None, "Requirement"],
+        [13, "Show Possible Values", "B2", [1, 2, 3, 4, 5, 6, 7, 8, 9], None, "Requirement"],
+        [14, "Quit and save" "Q", True, None, "Requirement"],
+        [15, "Display Hint", "S", True, None, "Requirement"],
+    ]
 
 def main():
     """

@@ -1,0 +1,16 @@
+Num,Name,Input,Output,Type
+1,Valid Coordinate A1,A1,A1,Requirement
+2,Valid Coordinate B2,B2,B2,Requirement
+3,Reversed Coordinate 2B,2B,B2,Requirement
+4,Lowercase Coordinate b2,b2,B2,Requirement
+5,Lowercase Reversed Coordinate 2b,2b,B2,Requirement
+6,Invalid Coordinate J1,J1,Invalid,Error
+7,Invalid Coordinate 0A,0A,Invalid,Error
+8,Invalid Coordinate Z2,Z2,Invalid,Error
+9,Valid Coordinate with space," B2",B2,Boundary
+10,Upper Bound Coordinate I9,I9,I9,Boundary
+11,Lower Bound Coordinate A1,A1,A1,Boundary
+12,Invalid Lower Bound Coordinate A0,A0,Invalid,Error
+13,Invalid Upper Bound Coordinate A10,A10,Invalid,Error
+14,Quit Input,Q,Q,Requirement
+15,Invalid Mixed Input,1Q,Invalid,Error

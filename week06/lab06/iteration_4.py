@@ -98,8 +98,10 @@ def get_coordinates(board, filename):
         done = False
         coordinates = input("Specify a coordinate to edit or 'Q' to save and quit: e.g. A1, C7, I9, Q: ")
         if len(coordinates) == 2:
-            valid_coordinates = validate_coordinates(coordinates[1], coordinates[0])
-            row, column = parse_coordinates(coordinates)
+            fixed_coordinates = reverse_coordinates(coordinates[0], coordinates[1])
+            print(fixed_coordinates)
+            valid_coordinates = validate_coordinates(fixed_coordinates[1], fixed_coordinates[0])
+            row, column = parse_coordinates(fixed_coordinates)
             if valid_coordinates == True:
                 valid = True
             else:
@@ -123,6 +125,13 @@ def parse_coordinates(coordinates):
         row = int(number) - 1
     return row, column
 
+def reverse_coordinates(row, column):
+    if row.isalpha() and column.isdigit():
+        temp = row
+        row = int(column)
+        column = temp
+    return f"{column}{row}"
+
 def validate_coordinates(row, column):
     """
     Validate whether the given Sudoku coordinates are within acceptable bounds.
@@ -134,8 +143,8 @@ def validate_coordinates(row, column):
     Returns:
         bool: True if coordinates are valid, False otherwise.
     """
-    row = int(row)
-    if row >= 1 or row <= 9 and column >= "A" or column <= "I":
+    
+    if int(row) >= 1 or int(row) <= 9 and column >= "A" or column <= "I":
         return True
     else:
         return False
@@ -215,6 +224,8 @@ def handle_input_value(board, filename, row, column, coordinates, value):
     elif value.lower() == "q":
         save_game(board, filename)
         return True
+    elif is_position_filled(board, row, column) == True:
+        print(f"Invalid move: The cell at coordinates {coordinates} is already filled.")
     elif is_valid_move(board, row, column, int(value)) == False:
         print(f"Invalid move: {value} is not a valid move for {coordinates}.")
     else:
@@ -372,6 +383,22 @@ def get_square_move_options(board, row, column):
 
     return square_move_options
 
+def is_position_filled(board, row, column):
+    """
+    Check whether the specified position in the Sudoku board is filled.
+
+    Parameters:
+        board (list of lists of int): The current state of the Sudoku board.
+        row (int): The row index of the position to check.
+        column (int): The column index of the position to check.
+
+    Returns:
+        bool: True if the position is filled, False otherwise.
+    """
+    if board[row][column] != 0:
+        return True
+    else:
+        return False
 
 def is_valid_move(board, row, column, value):
     """
@@ -419,50 +446,6 @@ def play_game(board, filename):
             done = handle_input_value(board, filename, row, column, coordinates, value)
 
     print("Thanks for playing!")
-
-def test_game_driver(board, filename):
-    """
-    
-    """
-
-# Things to test for:
-    # All test coordinates are valid
-    # Coodinate Validation:
-    # Invalid input: Recognize if the user types something other than a coordinate or the letter 'Q' to quit, or letter ‘S’ to display all possible values for a given square
-    # Reversed coordinates: Handle both "B2" and "2B" in the same way
-    # Lowercase coordinates: Handle both "B2" and "b2" in the same way
-    # Invalid number: Warn the user if an invalid number such as 0 or 11 is entered into the board
-    # Square already filled: Warn the user if the selected square already has a number
-    # Unique Row: Recognize if the user's number is already present on the selected row
-    # Unique Column: Recognize if the user's number is already present on the selected column
-    # Unique Inside Square: Recognize if the user's number is already present on the selected inside square
-    # Show possible values: At the user's request, show the possible values for a given square
-
-    # Test Cases: [num, name, input, output, value, type]
-    test_cases = [
-        [1, "Use letter J", "J1", False, None, "Error"],
-        [2, "Use letter Z", "ZZ", False, None, "Error"],
-        [3, "Valid Case", "B2", True, None, "Requirement"],
-        [4, "Reversed Coordinate", "2B", True, None, "Requirement"],
-        [5, "Lowercase Coordinate", "b2", True, None, "Requirement"],
-        [6, "Lowercase Coordinate Reversed", "2b", True, None, "Requirement"],
-        [7, "Invalid Number", "A0", False, None, "Boundary"],
-        [8, "Invalid Number", "A11", False, None, "Boundary"],
-        [9, "Square Already Filled", "A1", False, None, "Requirement"],
-        [10, "Unique Row", "A2", False, None, "Requirement"],
-        [11, "Unique Column", "B1", False, None, "Requirement"],
-        [12, "Unique Inside Square", "B2", False, None, "Requirement"],
-        [13, "Show Possible Values", "B2", [1, 2, 3, 4, 5, 6, 7, 8, 9], None, "Requirement"],
-        [14, "Quit and save" "Q", True, None, "Requirement"],
-        [15, "Display Hint", "S", True, None, "Requirement"],
-    ]
-
-    count = 0
-    for test_case in test_cases:
-        count += 1
-    
-
-
 
 def main():
     """

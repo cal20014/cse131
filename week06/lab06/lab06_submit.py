@@ -3,9 +3,23 @@
 # 2. Assignment Name:
 #      Lab 06 : Sudoku Program
 # 3. Assignment Description:
-#      -describe what this program is meant to do-
+#      A python program that allows the user to play a game of sudoku.
+#      The Game is played in the terminal. The program will read in a file
+#      containing the game board. The user will then be able to play the game.
+#      The user enters the coordinates of the cell they want to fill and then
+#      the value they want to fill it with. The program will check if the move
+#      is valid and if it is it will update the board. The user can also ask for
+#      a hint. The program will then display the possible values for that cell.
+#      The user can also save the game to a new or current file and quit the game.
 # 4. What was the hardest part? Be as specific as possible.
-#      Getting the hints and the valid move to work. Trying to figure out automated test cases was by far the most difficult part. it wasn't needed but I really wanted to try.
+#      Getting the hints and the valid move to work.
+#      Trying to figure out automated test cases was by far the most difficult part.
+#      it wasn't needed but I really wanted to try. I spent a lot of time trying to
+#      figure out how to do it. I ended up scrapping it because it wasn't time efficient.
+#      Another hard part about writing this program was all the error handeling
+#      and game mechanics. Allowing user input but limiting it to only valid input. 
+#      Over all this was really to make. I think I spent the most time
+#      refactoring my code to be more clean and readable
 # 5. How long did it take for you to complete the assignment?
 #      12 hours
 

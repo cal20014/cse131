@@ -107,7 +107,9 @@ function getDrawing(incorrectGuesses) {
 }
 
 function newGame() {
+  // Choose a random word from the list
   currentWord = words[Math.floor(Math.random() * words.length)];
+  // Reset guessed letters, incorrect word bank, and incorrect guess count
   guessedLetters = [];
   incorrectWordBank = [];
   incorrectGuesses = 0;
@@ -119,6 +121,7 @@ function newGame() {
 }
 
 function updateDisplay() {
+  // Update the displayed word based on guessed letters
   let displayedWord = "";
   for (let letter of currentWord) {
     if (guessedLetters.includes(letter)) {
@@ -134,13 +137,15 @@ function makeGuess() {
   const guessInput = document.getElementById("guess-input");
   const guess = guessInput.value.toLowerCase();
 
-  if (guess.length !== 1 || !/^[a-z]$/.test(guess)) {
+  // Validate input: Check if it's a single letter and is not a number
+  if (guess.length !== 1 || guess < "a" || guess > "z") {
     document.getElementById("message").textContent =
       "Please enter a valid letter.";
     guessInput.value = "";
     return;
   }
 
+  // Check if the letter has already been guessed
   if (guessedLetters.includes(guess)) {
     document.getElementById("message").textContent =
       "You've already guessed that letter.";
@@ -148,8 +153,10 @@ function makeGuess() {
     return;
   }
 
+  // Add the guessed letter to the list of guessed letters
   guessedLetters.push(guess);
 
+  // Check if the guessed letter is not in the word
   if (!currentWord.includes(guess)) {
     incorrectGuesses++;
     incorrectWordBank.push(guess);
@@ -166,18 +173,22 @@ function makeGuess() {
     }
   }
 
+  // Update the displayed word after the guess
   updateDisplay();
 
+  // Check if the player has guessed the word
   if (!document.getElementById("word-display").textContent.includes("_")) {
     document.getElementById("message").textContent =
       "Congratulations! You've guessed the word.";
     guessInput.disabled = true;
   }
 
+  // Clear the guess input
   guessInput.value = "";
 }
 
 function restartGame() {
+  // Reset the game to its initial state and start a new game
   guessedLetters = [];
   incorrectWordBank = [];
   incorrectGuesses = 0;
@@ -188,7 +199,7 @@ function restartGame() {
     getDrawing(incorrectGuesses);
 }
 
-// Attach event listeners
+// Attach event listeners to buttons
 document.getElementById("submit-btn").addEventListener("click", makeGuess);
 document.getElementById("new-word-btn").addEventListener("click", newGame);
 document.getElementById("restart-btn").addEventListener("click", restartGame);

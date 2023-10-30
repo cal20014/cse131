@@ -1,0 +1,57 @@
+FUNCTION find_sorted_subarray(array, start_index)
+    current_index = start_index
+    WHILE current_index < (length(array - 1)) AND array[current_index] <= array[current_index + 1]
+        current_index += 1
+    RETURN current_index + 1
+FUNCTION END
+
+FUNCTION merge_sorted_subarrays(sourceArray, start_index, end_of_subarray01, end_of_subarray02, destination)
+     current_index_in_sub01 = start_index
+     current_index_in_sub02 = end_of_subarray01
+     destination_index = start_index
+
+    WHILE current_index_in_sub01 < end_of_subarray01 AND current_index_in_sub02 < end_of_subarray02
+        IF sourceArray[current_index_in_sub01] <= sourceArray[current_index_in_sub02]
+            destination[destination_index] = sourceArray[current_index_in_sub01]
+            current_index_in_sub01 += 1
+        ELSE
+            destination[destination_index] = sourceArray[current_index_in_sub02]
+            current_index_in_sub02 += 1
+        destination_index += 1
+
+    WHILE current_index_in_sub01 < end_of_subarray01
+        destination[destination_index] = sourceArray[current_index_in_sub01]
+        current_index_in_sub01 AND destination_index += 1
+
+    WHILE current_index_in_sub02 < end_of_subarray02
+        destination[destination_index] = sourceArray[current_index_in_sub02]
+        current_index_in_sub02 AND destination_index += 1
+FUNCTION END
+
+
+FUNCTION sublist_sort(array)
+     temp_array = Array equal to an array equal to the size of the original array
+     array_size = length(array)
+     is_sorted = FALSE
+
+    WHILE NOT is_sorted
+         is_sorted = TRUE
+         start_index = 0
+
+        WHILE start_index < array_size
+             end_of_subarray01 = find_sorted_subarray(array, start_index)
+             end_of_subarray02 = find_sorted_subarray(array, end_of_subarray01)
+
+            IF end_of_subarray02 > array_size
+                 end_of_subarray02 = array_size
+
+            merge_sorted_subarrays(array, start_index, end_of_subarray01, end_of_subarray02, temp_array)
+            IF end_of_subarray02 != array_size
+                 is_sorted = FALSE
+
+             start_index = end_of_subarray02
+
+        SWAP array with temp_array
+
+    RETURN array
+FUNCTION END

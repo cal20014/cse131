@@ -27,6 +27,9 @@ def convert_to_hex(num):
 def convert_to_octal(num):
     return "0xff"
 
+def test_num_convert():
+    assert num_convert(10, "all") == "b1010 0xa 0o12"
+
 def main():
     num = get_num()
     format_type = get_format()

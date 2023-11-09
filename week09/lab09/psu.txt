@@ -1,0 +1,72 @@
+FUNCTION find_sorted_subarray(array, start_index) # O(n)
+current_index = start_index # O(1)
+WHILE current_index < (length(array) - 1) AND array[current_index] <= array[current_index + 1] # O(n)
+current_index += 1 # O(n)
+RETURN current_index + 1 # O(1)
+FUNCTION merge_sorted_subarrays(sourceArray, start_index, end_of_subarray01, end_of_subarray02, destination)# O(n)
+current_index_in_sub01 = start_index # O(1)
+current_index_in_sub02 = end_of_subarray01 # O(1)
+destination_index = start_index # O(1)
+WHILE current_index_in_sub01 < end_of_subarray01 AND current_index_in_sub02 < end_of_subarray02 # O(n)
+IF sourceArray[current_index_in_sub01] <= sourceArray[current_index_in_sub02] # O(n)
+destination[destination_index] = sourceArray[current_index_in_sub01] # O(n)
+current_index_in_sub01 += 1 # O(n)
+ELSE
+destination[destination_index] = sourceArray[current_index_in_sub02] # O(n)
+current_index_in_sub02 += 1 # O(n)
+destination_index += 1 # O(n)
+WHILE current_index_in_sub01 < end_of_subarray01 # O(n)
+destination[destination_index] = sourceArray[current_index_in_sub01] # O(n)
+current_index_in_sub01 += 1 # O(n)
+destination_index += 1 # O(n)
+WHILE current_index_in_sub02 < end_of_subarray02 # O(n)
+destination[destination_index] = sourceArray[current_index_in_sub02] # O(n)
+current_index_in_sub02 += 1 # O(n)
+destination_index += 1 # O(n)
+FUNCTION sublist_sort(array) # O(1)
+temp_array = Array equal to the size of the original array # O(1)
+array_size = length(array) # O(1)
+is_sorted = FALSE # O(1)
+WHILE NOT is_sorted # O(log n)
+is_sorted = TRUE # O(log n)
+start_index = 0 # O(log n)
+WHILE start_index < array_size # O(n log n)
+end_of_subarray01 = find_sorted_subarray(array, start_index) # O(n log n)
+end_of_subarray02 = find_sorted_subarray(array, end_of_subarray01) # O(n log n)
+IF end_of_subarray02 > array_size
+end_of_subarray02 = array_size # O(n log n)
+merge_sorted_subarrays(array, start_index, end_of_subarray01, end_of_subarray02, temp_array)# O(n log n)
+IF end_of_subarray02 != array_size
+is_sorted = FALSE # O(n log n)
+start_index = end_of_subarray02 # O(n log n)
+SWAP array with temp_array # O(n log n)
+RETURN array # O(n log n)
+FUNCTION run_test_cases()
+# Test cases an array of arrays input and expected output
+test_inputs = [
+[6, 12, 11] # Trace example Unsorted
+[3, 2, 1, 5, 4], # Normal Unsorted
+[1, 2, 3, 4, 5], # Already Sorted
+[5, 4, 3, 2, 1], # Reverse Sorted
+[1], # Single Element
+[], # Empty Array
+[2, 2, 2, 2, 2], # All elements the same
+["witch", "pumpkin", "ghost", "vampire", "zombie"] # Array of Strings Unsorted
+]
+expected_outputs = [
+[1, 2, 3, 4, 5],
+[1, 2, 3, 4, 5],
+[1, 2, 3, 4, 5],
+[1],
+[],
+[2, 2, 2, 2, 2],
+["ghost", "pumpkin", "vampire", "witch", "zombie"]
+]
+# Loop through each test case using its index
+FOR i from 0 to length(test_inputs) - 1
+# Sort the input array using the sublist_sort function
+sorted_array = sublist_sort(test_inputs[index])
+# Assert that the sorted_array matches the expected output
+ASSERT sorted_array == expected_outputs[index] # "Test failed for input: " + test_inputs[i]
+# If the assert does not fail, display a success message
+PUT "Test passed for input: ", test_inputs[index]

@@ -36,10 +36,11 @@ def sort_array(array, i_start, i_end):
     i_down = i_end
     i_pivot = i_start + i_end // 2
 
+
+    print(f"\n---\ni_start: {i_start}\ni_end: {i_end}\ni_pivot: {i_pivot}")
+
     if i_start == i_end or array == []: # End Condition
         return array 
-    
-    outer_count = 0
 
     while i_up < i_down:
         while array[i_up] <= array[i_pivot] and i_up < i_pivot:

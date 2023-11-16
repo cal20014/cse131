@@ -1,3 +1,27 @@
+def get_user_input():
+    user_input = input("Enter a number or letter: ")
+    return user_input
+
+def get_list():
+    user_list = []
+    getting_input = True
+    while getting_input:
+        user_input = get_user_input()
+        if user_input.lower() == "quit":
+            getting_input = False
+        else:
+            # Attempt to convert user input to an integer, if possible
+            try:
+                user_input = int(user_input)
+            except ValueError:
+                pass  # Keep the input as a string if it's not a number
+            user_list.append(user_input)
+            print(user_list)
+    return user_list
+    
+def display_list(any_list):
+    print(any_list)
+
 def find_sorted_subarray(array, start_index):
     current_index = start_index
 
@@ -63,5 +87,12 @@ def run_test_cases():
 
 
 def main():
+    user_list = get_list()
+    sorted_list = sublist_sort(user_list)
+    display_list(user_list)
+    display_list(sorted_list)
     print("Hello, World!")
+
+if __name__ == "__main__":
+    main()
 

@@ -1,0 +1,37 @@
+FUNCTION get_array()
+    array = [9, 8, 7, 6, 5, 4, 3, 2, 1]
+    return 
+
+FUNCTION display_array()
+    """
+    Displays an array with a given name in a formatted style with colored text.
+
+    Args
+        array (list) The array to display.
+        name (str) A descriptive name for the array.
+    """
+    PUT(====================================================)
+    PUT(name)
+    PUT(array)
+    PUT(====================================================)
+
+FUNCTION sort(array, i_start, i_end)
+    i_pivot = i_start + i_end // 2 # Change this to random? i_pivot = RandomNum(i_start, i_end)
+
+    IF array[i_start] < array[i_pivot]
+        i_start ++
+        sort(array, i_start, i_end)
+
+    ELSE
+        temp = i_pivot
+        i_pivot = i_start
+        i_start = temp
+        sort(array, i_start, i_end)
+
+FUNCTION main()
+    array = get_array()
+    sorted_array = sort(array, i_start, i_end)
+    display(array)
+    display(sorted_array)
+
+main()

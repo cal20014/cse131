@@ -1,0 +1,39 @@
+FUNCTION sort_rec(array, i_start, i_end):
+    i_up = i_start
+    i_down = i_end
+    i_pivot = (i_start + i_end) // 2
+
+    # End condition
+    IF i_up >= i_down or array == []:
+        RETURN array
+    
+    WHILE i_up < i_down:
+
+        WHILE array[i_up] <= array[i_pivot] and i_up < i_pivot:
+            i_up += 1
+
+        WHILE array[i_down] >= array[i_pivot] and i_down > i_pivot:
+            i_down -= 1
+        
+        IF i_pivot == i_up:
+            i_pivot = i_down
+        ELSE IF i_pivot == i_down:
+            i_pivot = i_up
+        
+        Swap array[i_up] and array[i_down]
+        
+    sort_rec(array, i_start, i_pivot - 1)
+    sort_rec(array, i_pivot + 1, i_end)
+    RETURN array
+
+
+
+FUNCTION main():
+    """
+    The main function.
+    """
+    array = [31, 72, 10, 32, 18, 95, 25, 50]
+    print(array)
+    print(len(array))
+    sorted_array = sort_rec(array, 0, len(array) - 1)
+    print(sorted_array)

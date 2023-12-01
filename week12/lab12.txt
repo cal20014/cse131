@@ -1,0 +1,25 @@
+FUNCTION sort_rec(array, i_start, i_end):                         # O(1)
+    i_up = i_start                                                # O(1)
+    i_down = i_end                                                # O(1)
+    i_pivot = (i_start + i_end) // 2                              # O(1)
+
+    # End condition
+    IF i_up >= i_down or array == []:                             # O(1)
+        RETURN array                                              # O(1)
+    
+    WHILE i_up < i_down:                                          # O(n)
+
+        WHILE array[i_up] <= array[i_pivot] and i_up < i_pivot:   # O(n)
+            i_up += 1                                             # O(1)
+        WHILE array[i_down] >= array[i_pivot] and i_down > i_pivot: # O(n)
+            i_down -= 1                                           # O(1)
+        
+        IF i_pivot == i_up:                                       # O(1)
+            i_pivot = i_down                                      # O(1)
+        ELSE IF i_pivot == i_down:                                # O(1)
+            i_pivot = i_up                                        # O(1)
+
+        SWAP array[i_up] and array[i_down]                        # O(1)
+    sort_rec(array, i_start, i_pivot - 1)                         # O(log n)
+    sort_rec(array, i_pivot + 1, i_end)                           # O(log n)
+    RETURN array                                                  # O(1)
